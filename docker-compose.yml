@@ -10,8 +10,7 @@ services:
       - tincan-backend
 
   backend:
-    build: ./backend/
-    image: tincan/backend:latest
+    image: ${DOCKER_HUB_USERNAME}/tincan-backend:latest
     command: /rails/bin/docker-entrypoint ./bin/rails server
     environment:
       - POSTGRES_USER=${PG_USER}
@@ -24,13 +23,7 @@ services:
       - db
 
   frontend:
-    build:
-      context: ./frontend/
-      args:
-        - NEXT_PUBLIC_API_BASE_URL=${API_BASE_URL}
-    image: tincan/frontend:latest
-    environment:
-      - NEXT_PUBLIC_API_BASE_URL=${API_BASE_URL}
+    image: ${DOCKER_HUB_USERNAME}/tincan-frontend:latest
     networks:
       - tincan-backend
 
