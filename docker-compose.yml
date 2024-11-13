@@ -7,7 +7,7 @@ services:
       - POSTGRES_PASSWORD=${PG_PASSWORD}
       - POSTGRES_USER=${PG_USER}
     networks:
-      - tincan-backend
+      - tincan-network
 
   backend:
     image: ${DOCKER_HUB_USERNAME}/tincan-backend:latest
@@ -18,30 +18,25 @@ services:
       - POSTGRES_HOST=db
       - RAILS_MASTER_KEY=${RAILS_MASTER_KEY}
     networks:
-      - tincan-backend
+      - tincan-network
     depends_on:
       - db
 
   frontend:
     image: ${DOCKER_HUB_USERNAME}/tincan-frontend:latest
     networks:
-      - tincan-backend
+      - tincan-network
 
   nginx:
-    image: nginx:1.27.1
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./nginx/ssl:/etc/nginx/ssl
-      - ./nginx/logs:/var/log/nginx
+    image: ${DOCKER_HUB_USERNAME}/tincan-nginx:latest
     ports:
       - "80:80"
-      - "443:443"
     depends_on:
       - frontend
       - backend
     networks:
-      - tincan-backend
+      - tincan-network
 
 networks:
-  tincan-backend:
+  tincan-network:
     driver: bridge
