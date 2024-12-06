@@ -32,10 +32,12 @@ services:
   nginx:
     image: ${DOCKER_HUB_USERNAME}/tincan-nginx:latest
     ports:
-      - "80:80"
+      - "80:8080" # Map 8080 (container) to 80 (host)
     depends_on:
       - frontend
       - backend
+    volumes:
+      - ./log:/var/log/nginx
     networks:
       - tincan-network
 
